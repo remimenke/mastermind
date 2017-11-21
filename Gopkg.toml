@@ -1,0 +1,4 @@
+[metadata.heroku]
+  root-package = "github.com/mrhenry/mr-shopify-meta"
+  install = [ "./..." ]
+  ensure = false
