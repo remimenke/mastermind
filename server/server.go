@@ -12,13 +12,11 @@ import (
 	"time"
 
 	"github.com/NYTimes/gziphandler"
-	bugsnag "github.com/bugsnag/bugsnag-go"
 	"github.com/jinzhu/gorm"
 	"github.com/julienschmidt/httprouter"
-	"github.com/mrhenry/mr-shopify-meta/track"
-	"github.com/romainmenke/mastermind/api/mastermind"
-	"github.com/romainmenke/mastermind/data"
-	"github.com/romainmenke/mastermind/params"
+	"github.com/remimenke/mastermind/api/mastermind"
+	"github.com/remimenke/mastermind/data"
+	"github.com/remimenke/mastermind/params"
 )
 
 // Server owns all server methods and state
@@ -35,9 +33,6 @@ func (s *Server) Run() {
 	signalChannel := make(chan os.Signal, 2)
 	signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
 
-	track.Start()
-	defer track.Stop()
-
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
 		dbURL = os.Getenv("JAWSDB_URL")
@@ -48,11 +43,8 @@ func (s *Server) Run() {
 		panic(err)
 	}
 
-	handler := track.Handler(
-		"api",
-		gziphandler.GzipHandler(
-			handler(db),
-		),
+	handler := gziphandler.GzipHandler(
+		handler(db),
 	)
 
 	server := &http.Server{
@@ -82,7 +74,6 @@ func (s *Server) Run() {
 		return
 	}
 	if err != nil {
-		bugsnag.Notify(err, bugsnag.Configuration{Synchronous: true})
 		panic(err)
 	}
 }

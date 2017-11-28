@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/romainmenke/mastermind/data"
+	"github.com/remimenke/mastermind/data"
 )
 
 func (c *controller) Register() http.Handler {

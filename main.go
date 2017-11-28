@@ -1,6 +1,6 @@
 package main
 
-import "github.com/romainmenke/mastermind/server"
+import "github.com/remimenke/mastermind/server"
 
 func main() {
 
